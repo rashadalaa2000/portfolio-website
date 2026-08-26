@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rashad Alaa — Data Analyst</title>
+<meta name="description" content="Rashad Alaa — Data Analyst specializing in SQL Server, Power BI and Python.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: '#0A0E16',
+          surface: '#121826',
+          surface2: '#1B2334',
+          edge: '#262F42',
+          ink: '#EDF1F7',
+          mute: '#8D97AC',
+          faint: '#5C6478',
+          amber: '#F2B705',
+          teal: '#2DD9C4',
+          rose: '#F2617A',
+        },
+        fontFamily: {
+          display: ['"Space Grotesk"', 'sans-serif'],
+          body: ['"Inter"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background-color: #0A0E16; }
+  ::selection { background: #F2B705; color: #0A0E16; }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(45,217,196,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45,217,196,0.05) 1px, transparent 1px);
+    background-size: 42px 42px;
+  }
+
+  .glow-amber { box-shadow: 0 0 0 1px rgba(242,183,5,0.25), 0 20px 60px -20px rgba(242,183,5,0.25); }
+  .glow-teal { box-shadow: 0 0 0 1px rgba(45,217,196,0.2), 0 20px 60px -25px rgba(45,217,196,0.35); }
+
+  .caret {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em;
+    background: #F2B705;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .bar-fill { transform-origin: left; transform: scaleX(0); transition: transform 1.1s cubic-bezier(.16,1,.3,1); }
+  .bar-fill.in { transform: scaleX(1); }
+
+  .badge {
+    border: 1px solid #262F42;
+    background: rgba(27,35,52,0.6);
+  }
+
+  .timeline-line {
+    background: linear-gradient(to bottom, rgba(242,183,5,0.6), rgba(45,217,196,0.5), transparent);
+  }
+
+  .card-hover { transition: transform .35s ease, border-color .35s ease, background-color .35s ease; }
+  .card-hover:hover { transform: translateY(-6px); border-color: rgba(242,183,5,0.4); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .bar-fill { transition: none !important; transform: none !important; opacity: 1 !important; }
+    .caret { animation: none; }
+  }
+
+  .focus-ring:focus-visible { outline: 2px solid #F2B705; outline-offset: 3px; border-radius: 4px; }
+
+  section[id] { scroll-margin-top: 5rem; }
+
+  .section-tag { position: relative; padding-left: 18px; }
+  .section-tag::before {
+    content: '';
+    position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+    width: 10px; height: 1px; background: currentColor;
+  }
+
+  .badge { transition: border-color .25s ease, background-color .25s ease, transform .25s ease; }
+  .badge:hover { border-color: rgba(45,217,196,0.5); background: rgba(45,217,196,0.08); transform: translateY(-1px); }
+
+  .featured-chip {
+    background: linear-gradient(90deg, rgba(242,183,5,0.16), rgba(242,183,5,0.04));
+    border: 1px solid rgba(242,183,5,0.35);
+    color: #F2B705;
+  }
+
+  .stat-card { transition: border-color .3s ease, transform .3s ease; }
+  .stat-card:hover { border-color: rgba(242,183,5,0.35); transform: translateY(-3px); }
+
+  .nav-link { position: relative; }
+  .nav-link::after {
+    content: ''; position: absolute; left: 0; bottom: -4px; width: 0; height: 1px;
+    background: #F2B705; transition: width .25s ease;
+  }
+  .nav-link:hover::after { width: 100%; }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #0A0E16; }
+  ::-webkit-scrollbar-thumb { background: #262F42; border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2DD9C4; }
+</style>
+</head>
+
+<body class="bg-bg text-ink font-body antialiased">
+
+<!-- ================= NAV ================= -->
+<header class="fixed top-0 inset-x-0 z-50 border-b border-edge/70 bg-bg/80 backdrop-blur-md">
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="#top" class="font-display font-semibold text-lg tracking-tight focus-ring">
+      rashad<span class="text-amber">.</span>sql
+    </a>
+    <div class="hidden md:flex items-center gap-8 font-mono text-[13px] text-mute">
+      <a href="#about" class="nav-link hover:text-ink transition-colors focus-ring">about</a>
+      <a href="#skills" class="nav-link hover:text-ink transition-colors focus-ring">skills</a>
+      <a href="#projects" class="nav-link hover:text-ink transition-colors focus-ring">projects</a>
+      <a href="#experience" class="nav-link hover:text-ink transition-colors focus-ring">experience</a>
+      <a href="#contact" class="nav-link hover:text-ink transition-colors focus-ring">contact</a>
+    </div>
+    <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-amber text-bg font-semibold text-sm px-4 py-2 rounded-md hover:brightness-110 transition focus-ring">
+      Contact Me
+    </a>
+    <button id="menuBtn" aria-label="Open menu" class="md:hidden text-ink focus-ring">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+  <div id="mobileMenu" class="hidden md:hidden border-t border-edge bg-bg/95 px-6 py-4 space-y-3 font-mono text-sm text-mute">
+    <a href="#about" class="block hover:text-ink">about</a>
+    <a href="#skills" class="block hover:text-ink">skills</a>
+    <a href="#projects" class="block hover:text-ink">projects</a>
+    <a href="#experience" class="block hover:text-ink">experience</a>
+    <a href="#contact" class="block hover:text-ink">contact</a>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section id="top" class="relative grid-bg pt-40 pb-24 px-6 overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(600px 300px at 15% 10%, rgba(242,183,5,0.08), transparent), radial-gradient(500px 260px at 90% 30%, rgba(45,217,196,0.08), transparent);"></div>
+
+  <div class="relative max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
+    <div>
+      <div class="inline-flex items-center gap-2 font-mono text-xs text-teal border border-teal/30 bg-teal/5 rounded-full px-3 py-1 mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-teal animate-pulse"></span>
+        -- open to data analyst roles
+      </div>
+
+      <h1 class="font-display font-semibold text-4xl sm:text-5xl lg:text-[3.4rem] leading-[1.08] tracking-tight">
+        Turning raw data<br>
+        into <span class="text-amber">decisions.</span>
+      </h1>
+
+      <p class="mt-6 text-mute text-lg leading-relaxed max-w-lg">
+        Data Analyst with hands-on experience in SQL Server, Power BI, and Python — specializing in data modeling, ETL, and dashboards that hold up under scrutiny. Built analytics solutions on datasets ranging from business operations to 17M+ flight records, and named <span class="text-amber">Best Mentor</span> at Microsoft Student Club (KFS) for teaching SQL and Power BI. Finance & Investment background adds real business context to every number.
+      </p>
+
+      <div class="mt-9 flex flex-wrap gap-3">
+        <a href="#projects" class="bg-amber text-bg font-semibold px-5 py-3 rounded-md text-sm hover:brightness-110 transition focus-ring">View Projects</a>
+        <a href="https://raw.githubusercontent.com/rashadalaa2000/portfolio-website/main/assets/rashad_alaa_cv_data_analyst.pdf" target="_blank" rel="noopener" class="border border-edge text-ink px-5 py-3 rounded-md text-sm hover:border-teal/50 hover:text-teal transition focus-ring">Download CV</a>
+        <a href="#contact" class="text-ink px-5 py-3 rounded-md text-sm hover:text-amber transition focus-ring">Contact Me →</a>
+      </div>
+
+      <div class="mt-10 flex items-center gap-6 font-mono text-xs text-faint">
+        <span>Giza, Egypt</span>
+        <span class="w-1 h-1 rounded-full bg-faint"></span>
+        <span>SQL Server · Power BI · Python</span>
+      </div>
+    </div>
+
+    <!-- terminal / query console signature element -->
+    <div class="relative reveal" data-reveal>
+      <div class="rounded-xl border border-edge bg-surface glow-amber overflow-hidden">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-edge bg-surface2">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose/70"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-amber/70"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-teal/70"></span>
+          <span class="ml-3 font-mono text-xs text-faint">query — rashad_profile.sql</span>
+        </div>
+        <div class="p-5 font-mono text-[13px] leading-6">
+          <p><span class="text-faint">1</span>&nbsp;&nbsp;<span id="typeLine" class="text-ink"></span><span class="caret" id="caret"></span></p>
+          <p class="text-faint">2</p>
+          <div id="resultBlock" class="mt-3 opacity-0 transition-opacity duration-700">
+            <p class="text-faint mb-2">-- 4 rows returned</p>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-ink w-24 shrink-0">SQL Server</span>
+                <div class="h-1.5 flex-1 bg-surface2 rounded-full overflow-hidden"><div class="bar-fill h-full bg-amber rounded-full" style="width:92%"></div></div>
+                <span class="text-mute w-8 text-right">92</span>
+              </div>
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-ink w-24 shrink-0">Power BI</span>
+                <div class="h-1.5 flex-1 bg-surface2 rounded-full overflow-hidden"><div class="bar-fill h-full bg-teal rounded-full" style="width:95%"></div></div>
+                <span class="text-mute w-8 text-right">95</span>
+              </div>
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-ink w-24 shrink-0">Python</span>
+                <div class="h-1.5 flex-1 bg-surface2 rounded-full overflow-hidden"><div class="bar-fill h-full bg-rose rounded-full" style="width:85%"></div></div>
+                <span class="text-mute w-8 text-right">85</span>
+              </div>
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-ink w-24 shrink-0">Excel</span>
+                <div class="h-1.5 flex-1 bg-surface2 rounded-full overflow-hidden"><div class="bar-fill h-full bg-amber/70 rounded-full" style="width:88%"></div></div>
+                <span class="text-mute w-8 text-right">88</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about" class="px-6 py-24 border-t border-edge">
+  <div class="max-w-6xl mx-auto">
+    <p class="section-tag font-mono text-teal text-sm mb-3 reveal" data-reveal>about</p>
+    <div class="grid lg:grid-cols-5 gap-12">
+      <div class="lg:col-span-3 reveal" data-reveal>
+        <h2 class="font-display text-3xl font-semibold mb-6">Analyst first, finance-minded, data-obsessed.</h2>
+        <p class="text-mute leading-relaxed mb-4">
+          I'm a fourth-year Finance & Investment student at Cairo University who spends most of his time in SSMS and Power BI rather than textbooks. My focus is building complete analytics systems: star-schema models, clean ETL, DAX measures that hold up, and dashboards people actually trust.
+        </p>
+        <p class="text-mute leading-relaxed">
+          The finance background isn't decorative — it shapes how I frame a metric, when I question a number, and how I present findings to people who care about the business impact, not just the query behind it. I mentor other students in SQL and Power BI at the Microsoft Student Club, an experience that earned me the <span class="text-ink">Best Mentor</span> award and keeps my fundamentals sharp and my explanations clear.
+        </p>
+      </div>
+      <div class="lg:col-span-2 grid grid-cols-2 gap-4 reveal" data-reveal>
+        <div class="stat-card rounded-lg border border-edge bg-surface p-5">
+          <p class="font-display text-3xl font-semibold text-amber">4+</p>
+          <p class="font-mono text-xs text-faint mt-1">end-to-end BI projects</p>
+        </div>
+        <div class="stat-card rounded-lg border border-edge bg-surface p-5">
+          <p class="font-display text-3xl font-semibold text-teal">18M+</p>
+          <p class="font-mono text-xs text-faint mt-1">records analyzed</p>
+        </div>
+        <div class="stat-card rounded-lg border border-edge bg-surface p-5">
+          <p class="font-display text-3xl font-semibold text-amber">8+</p>
+          <p class="font-mono text-xs text-faint mt-1">students mentored</p>
+        </div>
+        <div class="stat-card rounded-lg border border-edge bg-surface p-5">
+          <p class="font-display text-3xl font-semibold text-teal">18</p>
+          <p class="font-mono text-xs text-faint mt-1">Canadian cities modeled</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section id="skills" class="px-6 py-24 border-t border-edge bg-surface/40">
+  <div class="max-w-6xl mx-auto">
+    <p class="section-tag font-mono text-teal text-sm mb-3 reveal" data-reveal>skills</p>
+    <h2 class="font-display text-3xl font-semibold mb-12 reveal" data-reveal>What I build with.</h2>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <div class="rounded-xl border border-edge bg-surface p-6 reveal" data-reveal>
+        <h3 class="font-display font-semibold text-lg mb-1">Databases & SQL</h3>
+        <p class="font-mono text-xs text-faint mb-4">-- modeling & data engineering</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">SQL Server</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">SSMS</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Star Schema / ERD</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">ETL Pipelines</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Window Functions</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Views & Subqueries</span>
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-edge bg-surface p-6 reveal" data-reveal>
+        <h3 class="font-display font-semibold text-lg mb-1">BI & Dashboards</h3>
+        <p class="font-mono text-xs text-faint mb-4">-- reporting layer</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Power BI Desktop</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">DAX</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Power Query</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">KPI Design</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Dashboard UX</span>
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-edge bg-surface p-6 reveal" data-reveal>
+        <h3 class="font-display font-semibold text-lg mb-1">Programming & Modeling</h3>
+        <p class="font-mono text-xs text-faint mb-4">-- analysis layer</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Python</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Pandas / NumPy</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Matplotlib / Seaborn</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Statistical Analysis</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">RFM Segmentation</span>
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-edge bg-surface p-6 reveal" data-reveal>
+        <h3 class="font-display font-semibold text-lg mb-1">Tools & Frameworks</h3>
+        <p class="font-mono text-xs text-faint mb-4">-- workflow</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Advanced Excel</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Git & GitHub</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Jupyter Notebook</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Data Documentation</span>
+          <span class="badge px-3 py-1.5 rounded-md text-sm text-ink">Presentation & Storytelling</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section id="projects" class="px-6 py-24 border-t border-edge">
+  <div class="max-w-6xl mx-auto">
+    <p class="section-tag font-mono text-teal text-sm mb-3 reveal" data-reveal>projects</p>
+    <h2 class="font-display text-3xl font-semibold mb-12 reveal" data-reveal>Featured work.</h2>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- Project 1 -->
+      <article class="rounded-xl border border-edge bg-surface p-6 flex flex-col card-hover reveal" data-reveal>
+        <h3 class="font-display font-semibold text-xl">Superstore Sales Analysis</h3>
+        <p class="font-mono text-xs text-faint mt-1 mb-4">star schema · profitability modeling</p>
+        <ul class="text-mute text-sm space-y-3 flex-1">
+          <li>Architected a star-schema model in SQL Server powering 3 interactive Power BI dashboards.</li>
+          <li>Found top 10% of customers drove <span class="text-teal">50%+</span> of total profit at just 9.3% avg discount.</li>
+          <li>Bottom 10% cost <span class="text-rose">−$328K</span> at 28.4% avg discount — modeled a 15% cap projecting <span class="text-amber">~$584K</span> recovered profit.</li>
+        </ul>
+        <a href="https://github.com/rashadalaa2000/superstore-powerbi-analytics/blob/main/docs/overview.png?raw=true" target="_blank" rel="noopener" class="group block rounded-lg overflow-hidden border border-edge focus-ring mt-5 mb-5">
+          <img src="https://github.com/rashadalaa2000/superstore-powerbi-analytics/blob/main/docs/overview.png?raw=true" alt="Superstore Sales Analysis dashboard overview" loading="lazy" class="w-full h-32 object-cover object-top group-hover:scale-105 transition duration-300">
+          <p class="font-mono text-[10px] text-faint px-2 py-1 bg-surface2">Dashboard Overview</p>
+        </a>
+        <div class="flex flex-wrap gap-2 mb-5">
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">SQL Server</span>
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">Power BI</span>
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">DAX</span>
+        </div>
+        <div class="flex gap-3 pt-4 border-t border-edge">
+          <a href="https://github.com/rashadalaa2000" class="text-sm text-ink hover:text-amber transition flex items-center gap-1.5 focus-ring">GitHub →</a>
+        </div>
+      </article>
+
+      <!-- Project 2 -->
+      <article class="relative rounded-xl border border-edge bg-surface p-6 flex flex-col card-hover reveal" data-reveal>
+        <span class="featured-chip absolute -top-3 left-6 font-mono text-[11px] px-2.5 py-1 rounded-full">Featured</span>
+        <h3 class="font-display font-semibold text-xl">Supply Chain Analytics Platform (CanRoute)</h3>
+        <p class="font-mono text-xs text-faint mt-1 mb-4">82K+ orders · Canadian B2B last-mile delivery · 4-page Power BI</p>
+        <ul class="text-mute text-sm space-y-3 flex-1">
+          <li>Designed a Galaxy Schema warehouse — 3 fact tables sharing 7 dimensions — with a full SQL Server ETL pipeline and data dictionary.</li>
+          <li>Built a 4-page Power BI dashboard: <span class="text-ink">Executive Overview</span>, <span class="text-ink">Logistics & Delivery Operations</span>, <span class="text-ink">Retailer Performance</span>, and <span class="text-ink">Financial Health</span>.</li>
+          <li>Flagged a data-quality anomaly across <span class="text-rose">~16.5% of orders</span> and quantified <span class="text-rose">cash-at-risk</span> from paid-but-undelivered shipments via custom DAX measures.</li>
+        </ul>
+        <div class="grid grid-cols-2 gap-2.5 mt-5 mb-5">
+          <a href="https://github.com/rashadalaa2000/Supply-Chain-Analytics-Platform/blob/main/power_bi/screenshots/1-executive_overview/executive_overview.png?raw=true" target="_blank" rel="noopener" class="group block rounded-lg overflow-hidden border border-edge focus-ring">
+            <img src="https://github.com/rashadalaa2000/Supply-Chain-Analytics-Platform/blob/main/power_bi/screenshots/1-executive_overview/executive_overview.png?raw=true" alt="Executive Overview dashboard" loading="lazy" class="w-full h-24 object-cover object-top group-hover:scale-105 transition duration-300">
+            <p class="font-mono text-[10px] text-faint px-2 py-1 bg-surface2">Executive Overview</p>
+          </a>
+          <a href="https://github.com/rashadalaa2000/Supply-Chain-Analytics-Platform/blob/main/power_bi/screenshots/2-logistics_and_delivery/logistics_and_delivery.png?raw=true" target="_blank" rel="noopener" class="group block rounded-lg overflow-hidden border border-edge focus-ring">
+            <img src="https://github.com/rashadalaa2000/Supply-Chain-Analytics-Platform/blob/main/power_bi/screenshots/2-logistics_and_delivery/logistics_and_delivery.png?raw=true" alt="Logistics & Delivery Operations dashboard" loading="lazy" class="w-full h-24 object-cover object-top group-hover:scale-105 transition duration-300">
+            <p class="font-mono text-[10px] text-faint px-2 py-1 bg-surface2">Logistics & Delivery</p>
+          </a>
+          <a href="https://github.com/rashadalaa2000/Supply-Chain-Analytics-Platform/blob/main/power_bi/screenshots/3-retailer_performance/retailer_performance.png?raw=true" target="_blank" rel="noopener" class="group block rounded-lg overflow-hidden border border-edge focus-ring">
+            <img src="https://github.com/rashadalaa2000/Supply-Chain-Analytics-Platform/blob/main/power_bi/screenshots/3-retailer_performance/retailer_performance.png?raw=true" alt="Retailer Performance dashboard" loading="lazy" class="w-full h-24 object-cover object-top group-hover:scale-105 transition duration-300">
+            <p class="font-mono text-[10px] text-faint px-2 py-1 bg-surface2">Retailer Performance</p>
+          </a>
+          <a href="https://github.com/rashadalaa2000/Supply-Chain-Analytics-Platform/blob/main/power_bi/screenshots/4-financial_health/financial_health.png?raw=true" target="_blank" rel="noopener" class="group block rounded-lg overflow-hidden border border-edge focus-ring">
+            <img src="https://github.com/rashadalaa2000/Supply-Chain-Analytics-Platform/blob/main/power_bi/screenshots/4-financial_health/financial_health.png?raw=true" alt="Financial Health dashboard" loading="lazy" class="w-full h-24 object-cover object-top group-hover:scale-105 transition duration-300">
+            <p class="font-mono text-[10px] text-faint px-2 py-1 bg-surface2">Financial Health</p>
+          </a>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-5">
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">SQL Server</span>
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">Power BI</span>
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">Galaxy Schema</span>
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">DAX</span>
+        </div>
+        <div class="flex gap-3 pt-4 border-t border-edge">
+          <a href="https://github.com/rashadalaa2000/Supply-Chain-Analytics-Platform" target="_blank" rel="noopener" class="text-sm text-ink hover:text-amber transition flex items-center gap-1.5 focus-ring">GitHub →</a>
+        </div>
+      </article>
+
+      <!-- Project 3 -->
+      <article class="rounded-xl border border-edge bg-surface p-6 flex flex-col card-hover reveal" data-reveal>
+        <h3 class="font-display font-semibold text-xl">Banking Transaction Analysis</h3>
+        <p class="font-mono text-xs text-faint mt-1 mb-4">1M+ transactions · ERD design</p>
+        <ul class="text-mute text-sm space-y-3 flex-1">
+          <li>Designed an ERD and built a banking database in SQL Server analyzing 1M+ transactions.</li>
+          <li>Identified a <span class="text-teal">99.92%</span> system success rate and 8PM as peak hour (~100K transactions/hr).</li>
+          <li>Found 70% of high-value transactions (>6.5M INR) occur after 6PM; Saturdays post the highest avg transaction value.</li>
+        </ul>
+        <div class="flex flex-wrap gap-2 mt-5 mb-5">
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">SQL Server</span>
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">ERD</span>
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">Data Modeling</span>
+        </div>
+        <div class="flex gap-3 pt-4 border-t border-edge">
+          <a href="https://github.com/rashadalaa2000" class="text-sm text-ink hover:text-amber transition flex items-center gap-1.5 focus-ring">GitHub →</a>
+        </div>
+      </article>
+
+      <!-- Project 4 -->
+      <article class="relative rounded-xl border border-edge bg-surface p-6 flex flex-col card-hover reveal" data-reveal>
+        <span class="featured-chip absolute -top-3 left-6 font-mono text-[11px] px-2.5 py-1 rounded-full">Featured</span>
+        <h3 class="font-display font-semibold text-xl">BTS Flight Analytics — Power BI Reporting Layer</h3>
+        <p class="font-mono text-xs text-faint mt-1 mb-4">17M+ flight records · 3 dashboards</p>
+        <ul class="text-mute text-sm space-y-3 flex-1">
+          <li>Built the full Power BI reporting layer on top of 17M+ U.S. domestic flight records: 3 dashboards, a themed landing page, and custom DAX measures.</li>
+          <li>Modeled delay, cancellation, and route-performance metrics across carriers, airports, and time periods.</li>
+          <li>Produced business-recommendation documents with carefully hedged causal language to avoid overstating correlational findings.</li>
+        </ul>
+        <div class="grid grid-cols-2 gap-2.5 mt-5 mb-5">
+          <a href="https://github.com/rashadalaa2000/bts-flight-analytics-powerbi/blob/main/assets/Landing_page.png?raw=true" target="_blank" rel="noopener" class="group block rounded-lg overflow-hidden border border-edge focus-ring">
+            <img src="https://github.com/rashadalaa2000/bts-flight-analytics-powerbi/blob/main/assets/Landing_page.png?raw=true" alt="BTS Flight Analytics landing page" loading="lazy" class="w-full h-24 object-cover object-top group-hover:scale-105 transition duration-300">
+            <p class="font-mono text-[10px] text-faint px-2 py-1 bg-surface2">Landing Page</p>
+          </a>
+          <a href="https://github.com/rashadalaa2000/bts-flight-analytics-powerbi/blob/main/assets/Flight_Performance.png?raw=true" target="_blank" rel="noopener" class="group block rounded-lg overflow-hidden border border-edge focus-ring">
+            <img src="https://github.com/rashadalaa2000/bts-flight-analytics-powerbi/blob/main/assets/Flight_Performance.png?raw=true" alt="Flight Performance dashboard" loading="lazy" class="w-full h-24 object-cover object-top group-hover:scale-105 transition duration-300">
+            <p class="font-mono text-[10px] text-faint px-2 py-1 bg-surface2">Flight Performance</p>
+          </a>
+          <a href="https://github.com/rashadalaa2000/bts-flight-analytics-powerbi/blob/main/assets/Delay%26Root-Cause.png?raw=true" target="_blank" rel="noopener" class="group block rounded-lg overflow-hidden border border-edge focus-ring">
+            <img src="https://github.com/rashadalaa2000/bts-flight-analytics-powerbi/blob/main/assets/Delay%26Root-Cause.png?raw=true" alt="Delay & Root-Cause dashboard" loading="lazy" class="w-full h-24 object-cover object-top group-hover:scale-105 transition duration-300">
+            <p class="font-mono text-[10px] text-faint px-2 py-1 bg-surface2">Delay & Root-Cause</p>
+          </a>
+          <a href="https://github.com/rashadalaa2000/bts-flight-analytics-powerbi/blob/main/assets/Operations%26Logistics.png?raw=true" target="_blank" rel="noopener" class="group block rounded-lg overflow-hidden border border-edge focus-ring">
+            <img src="https://github.com/rashadalaa2000/bts-flight-analytics-powerbi/blob/main/assets/Operations%26Logistics.png?raw=true" alt="Operations & Logistics dashboard" loading="lazy" class="w-full h-24 object-cover object-top group-hover:scale-105 transition duration-300">
+            <p class="font-mono text-[10px] text-faint px-2 py-1 bg-surface2">Operations & Logistics</p>
+          </a>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-5">
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">Power BI</span>
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">DAX</span>
+          <span class="badge px-2.5 py-1 rounded text-xs text-mute">Data Storytelling</span>
+        </div>
+        <div class="flex gap-3 pt-4 border-t border-edge">
+          <a href="https://github.com/rashadalaa2000/bts-flight-analytics-powerbi" target="_blank" rel="noopener" class="text-sm text-ink hover:text-amber transition flex items-center gap-1.5 focus-ring">GitHub →</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= EXPERIENCE ================= -->
+<section id="experience" class="px-6 py-24 border-t border-edge bg-surface/40">
+  <div class="max-w-6xl mx-auto">
+    <p class="section-tag font-mono text-teal text-sm mb-3 reveal" data-reveal>experience</p>
+    <h2 class="font-display text-3xl font-semibold mb-14 reveal" data-reveal>Where I've worked & learned.</h2>
+
+    <div class="relative pl-8">
+      <div class="absolute left-[7px] top-2 bottom-2 w-px timeline-line"></div>
+
+      <div class="relative mb-12 reveal" data-reveal>
+        <span class="absolute -left-8 top-1.5 w-3.5 h-3.5 rounded-full bg-amber ring-4 ring-bg"></span>
+        <p class="font-mono text-xs text-amber mb-1">-- feb 2026 · may 2026</p>
+        <h3 class="font-display font-semibold text-lg">Data Analysis Technical Mentor</h3>
+        <p class="text-mute text-sm mb-3">Microsoft Student Club (KFS) · Remote</p>
+        <ul class="text-mute text-sm space-y-1.5 list-disc list-inside">
+          <li>Awarded <span class="text-ink">Best Mentor</span> for outstanding mentoring and student support.</li>
+          <li>Delivered 5+ SQL & Power BI sessions to 10–20 students: advanced queries, window functions, Power Query, data modeling, and SQL Server–Power BI integration.</li>
+          <li>Provided hands-on mentoring through assignments, code reviews, and 1:1 technical feedback — improving completion and comprehension rates.</li>
+        </ul>
+      </div>
+
+      <div class="relative mb-12 reveal" data-reveal>
+        <span class="absolute -left-8 top-1.5 w-3.5 h-3.5 rounded-full bg-teal ring-4 ring-bg"></span>
+        <p class="font-mono text-xs text-teal mb-1">-- jan 2026 · feb 2026</p>
+        <h3 class="font-display font-semibold text-lg">Data Analysis Intern</h3>
+        <p class="text-mute text-sm mb-3">Orange Digital Center Egypt & Instant Software Solutions · Cairo</p>
+        <ul class="text-mute text-sm space-y-1.5 list-disc list-inside">
+          <li>Delivered two end-to-end analytics projects: ERD design, SQL analysis, Power BI dashboards.</li>
+          <li>Presented weekly analytical findings through structured presentations.</li>
+        </ul>
+      </div>
+
+      <div class="relative reveal" data-reveal>
+        <span class="absolute -left-8 top-1.5 w-3.5 h-3.5 rounded-full bg-surface2 border-2 border-edge ring-4 ring-bg"></span>
+        <p class="font-mono text-xs text-faint mb-1">-- sep 2023 · present</p>
+        <h3 class="font-display font-semibold text-lg">B.Com, Finance & Investment</h3>
+        <p class="text-mute text-sm mb-3">Cairo University — Faculty of Commerce</p>
+        <p class="text-mute text-sm">Coursework: Financial Analysis, Investment Management, Business Statistics.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="px-6 py-24 border-t border-edge">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-5 gap-12">
+    <div class="lg:col-span-2 reveal" data-reveal>
+      <p class="section-tag font-mono text-teal text-sm mb-3">contact</p>
+      <h2 class="font-display text-3xl font-semibold mb-5">Let's talk data.</h2>
+      <p class="text-mute leading-relaxed mb-8">
+        Open to Data Analyst and Financial Analyst roles. Reach out directly or send a message — I reply quickly.
+      </p>
+      <div class="space-y-4 font-mono text-sm">
+        <a href="mailto:rashadalaa2000@gmail.com" class="flex items-center gap-3 text-ink hover:text-amber transition focus-ring">
+          <span class="w-8 h-8 rounded-md border border-edge flex items-center justify-center text-xs">@</span>
+          rashadalaa2000@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/rashad-alaa-107a6429a" class="flex items-center gap-3 text-ink hover:text-teal transition focus-ring">
+          <span class="w-8 h-8 rounded-md border border-edge flex items-center justify-center text-xs">in</span>
+          linkedin.com/in/rashad-alaa
+        </a>
+        <a href="https://github.com/rashadalaa2000" class="flex items-center gap-3 text-ink hover:text-teal transition focus-ring">
+          <span class="w-8 h-8 rounded-md border border-edge flex items-center justify-center text-xs">gh</span>
+          github.com/rashadalaa2000
+        </a>
+        <p class="flex items-center gap-3 text-mute">
+          <span class="w-8 h-8 rounded-md border border-edge flex items-center justify-center text-xs">📍</span>
+          Giza, Egypt
+        </p>
+      </div>
+    </div>
+
+    <form class="lg:col-span-3 rounded-xl border border-edge bg-surface p-6 sm:p-8 reveal" data-reveal action="https://formsubmit.co/rashadalaa2000@gmail.com" method="POST" onsubmit="return handleContactSubmit(event)">
+      <input type="hidden" name="_subject" value="New message from portfolio site">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div>
+          <label for="name" class="block font-mono text-xs text-faint mb-2">name</label>
+          <input id="name" name="name" type="text" required class="w-full bg-surface2 border border-edge rounded-md px-4 py-2.5 text-sm text-ink placeholder-faint focus:border-amber focus:outline-none transition" placeholder="Your name">
+        </div>
+        <div>
+          <label for="email" class="block font-mono text-xs text-faint mb-2">email</label>
+          <input id="email" name="email" type="email" required class="w-full bg-surface2 border border-edge rounded-md px-4 py-2.5 text-sm text-ink placeholder-faint focus:border-amber focus:outline-none transition" placeholder="you@company.com">
+        </div>
+      </div>
+      <div class="mt-5">
+        <label for="message" class="block font-mono text-xs text-faint mb-2">message</label>
+        <textarea id="message" name="message" required rows="4" class="w-full bg-surface2 border border-edge rounded-md px-4 py-2.5 text-sm text-ink placeholder-faint focus:border-amber focus:outline-none transition resize-none" placeholder="What are you looking to build?"></textarea>
+      </div>
+      <button type="submit" class="mt-6 bg-amber text-bg font-semibold px-6 py-3 rounded-md text-sm hover:brightness-110 transition focus-ring">Send Message</button>
+      <p id="formNote" class="mt-3 font-mono text-xs hidden"></p>
+    </form>
+  </div>
+</section>
+
+<footer class="px-6 py-8 border-t border-edge">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-xs text-faint">
+    <p>© 2026 Rashad Alaa. All rights reserved.</p>
+    <p>-- end of file</p>
+  </div>
+</footer>
+
+<script>
+  // mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('[data-reveal]');
+  revealEls.forEach(el => el.classList.add('reveal'));
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // hero typing effect
+  const query = "SELECT skill, impact FROM rashad.profile WHERE domain = 'BI';";
+  const typeLine = document.getElementById('typeLine');
+  const caret = document.getElementById('caret');
+  const resultBlock = document.getElementById('resultBlock');
+  let i = 0;
+
+  function typeChar() {
+    if (i <= query.length) {
+      typeLine.textContent = query.slice(0, i);
+      i++;
+      setTimeout(typeChar, 28);
+    } else {
+      caret.style.display = 'none';
+      resultBlock.classList.remove('opacity-0');
+      resultBlock.classList.add('opacity-100');
+      setTimeout(() => {
+        document.querySelectorAll('.bar-fill').forEach(bar => bar.classList.add('in'));
+      }, 200);
+    }
+  }
+  setTimeout(typeChar, 500);
+
+  async function handleContactSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const note = document.getElementById('formNote');
+    const btn = form.querySelector('button[type="submit"]');
+    const originalBtnText = btn.textContent;
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    try {
+      const formData = new FormData(form);
+      const res = await fetch('https://formsubmit.co/ajax/rashadalaa2000@gmail.com', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      });
+      if (!res.ok) throw new Error('Request failed');
+      note.textContent = "-- message sent successfully. I'll get back to you soon.";
+      note.classList.remove('hidden', 'text-rose');
+      note.classList.add('text-teal');
+      form.reset();
+    } catch (err) {
+      note.textContent = '-- something went wrong, please email me directly at rashadalaa2000@gmail.com';
+      note.classList.remove('hidden', 'text-teal');
+      note.classList.add('text-rose');
+    } finally {
+      btn.textContent = originalBtnText;
+      btn.disabled = false;
+    }
+    return false;
+  }
+</script>
+
+</body>
+</html>
